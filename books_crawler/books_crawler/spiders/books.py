@@ -52,6 +52,8 @@ import scrapy
 from scrapy.spiders import Spider
 from scrapy.http import Request
 
+def product_description(response, value):
+    return response.xpath('//th[text()="' + value + '"]/following-sibling::td/text()').extract()[0]
 
 class BooksSpider(Spider):
     name = 'books'
@@ -66,4 +68,19 @@ class BooksSpider(Spider):
         absolute_next_page_url = response.urljoin(next_page_url)
         yield Request(absolute_next_page_url)
     def parse_book(self, response):
-        pass
+        title = response.css('h1::text').extract()[0]
+        price = response.xpath('//*[@class="price_color"]/text()').extract()[0]
+        image_url = response.xpath('//img/@src').extract()[0]
+        image_url = image_url.replace('../..', 'http://books.toscrape.com')
+        rating = response.xpath('//*[contains(@class,"star-rating")]/@class').extract()[0]
+        rating = rating.replace('star-rating', '')
+        description = response.xpath('//*[@id="product_description"]/following-sibling::p').extract()[0]
+        upc = product_description(response, 'UPC')
+        product_type = product_description(response, 'Product Type')
+        price_without_tax = product_description(response, 'Price (excl. tax)')
+        price_with_tax = product_description(response, 'Price (incl. tax)')
+        tax = product_description(response, 'Tax')
+        availability = product_description(response, 'Availability')
+        number_of_reviews = product_description(response, 'Number of reviews')
+
+
