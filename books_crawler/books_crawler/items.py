@@ -24,3 +24,4 @@ class BooksCrawlerItem(scrapy.Item):
     # availability = scrapy.Field()
     # number_of_reviews = scrapy.Field()
     pass
+

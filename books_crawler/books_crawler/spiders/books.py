@@ -146,7 +146,6 @@ import glob
 import pymysql.cursors
 from scrapy.spiders import Spider
 from scrapy.http import Request
-from books_crawler.items import BooksCrawlerItem
 
 def product_description(response, value):
     return response.xpath('//th[text()="' + value + '"]/following-sibling::td/text()').extract()[0]
@@ -192,28 +191,29 @@ class BooksSpider(Spider):
         }
 
     def close(self, reason):
-        csv_file = max(glob.iglob('*.csv'), key=os.path.getctime)
-        connection = pymysql.connect(host='127.0.0.1',
-                                     user='root',
-                                     password='123456',
-                                     db='books_db',
-                                     charset='utf8mb4',
-                                     unix_socket='/Applications/MAMP/tmp/mysql/mysql.sock',
-                                     cursorclass=pymysql.cursors.DictCursor)
-
-
-        try:
-            with connection.cursor() as cursor, open(csv_file, 'r') as data_file:
-                csv_data = csv.reader(data_file)
-                row_count = 0
-                for row in csv_data:
-                    print(row)
-                    if row_count != 0:
-                        cursor.execute(
-                            'insert ignore into books_table (title, rating, upc, product_type, price_without_tax,'
-                            'price_with_tax, tax, availability, number_of_reviews) values (%s, %s, %s, %s, %s, %s,'
-                            '%s, %s, %s)', row)
-                    row_count += 1
-            connection.commit()
-        finally:
-            connection.close()
+        pass
+        # csv_file = max(glob.iglob('*.csv'), key=os.path.getctime)
+        # connection = pymysql.connect(host='127.0.0.1',
+        #                              user='root',
+        #                              password='123456',
+        #                              db='books_db',
+        #                              charset='utf8mb4',
+        #                              unix_socket='/Applications/MAMP/tmp/mysql/mysql.sock',
+        #                              cursorclass=pymysql.cursors.DictCursor)
+        #
+        #
+        # try:
+        #     with connection.cursor() as cursor, open(csv_file, 'r') as data_file:
+        #         csv_data = csv.reader(data_file)
+        #         row_count = 0
+        #         for row in csv_data:
+        #             print(row)
+        #             if row_count != 0:
+        #                 cursor.execute(
+        #                     'insert ignore into books_table (title, rating, upc, product_type, price_without_tax,'
+        #                     'price_with_tax, tax, availability, number_of_reviews) values (%s, %s, %s, %s, %s, %s,'
+        #                     '%s, %s, %s)', row)
+        #             row_count += 1
+        #     connection.commit()
+        # finally:
+        #     connection.close()
