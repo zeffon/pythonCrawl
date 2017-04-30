@@ -21,6 +21,9 @@ NEWSPIDER_MODULE = 'class_central_spider.spiders'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
+#get the exported items in the preferred order
+FEED_EXPORT_FIELDS = ['Article Title', 'Date', 'Author', 'Text']
+
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
